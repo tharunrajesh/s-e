@@ -1,0 +1,49 @@
+import csv
+import matplotlib.pyplot as plt
+
+def quadratic_weather_model(time, a, b, c):
+    """
+    Calculate temperature using the quadratic equation:
+    temperature = a * (time ** 2) + b * time + c
+    """
+    temperature = a * (time ** 2) + b * time + c
+    return temperature
+
+def main():
+    print("Quadratic Weather Modeling")
+    print("==========================")
+
+    try:
+        # Open the CSV file containing coefficients
+        with open('coefficients.csv', mode='r') as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip header row
+
+            # Define time values (0 to 10 in this case)
+            time_values = list(range(0, 11))
+            plt.figure(figsize=(10, 6))  # Set figure size for the plot
+
+            # Iterate through each row in the CSV file
+            for row in reader:
+                a, b, c = map(float, row)
+
+                # Calculate temperature values using quadratic_weather_model function
+                temperature_values = [quadratic_weather_model(t, a, b, c) for t in time_values]
+
+                # Plot temperature_values against time_values with markers and labels
+                plt.plot(time_values, temperature_values, marker='o', linestyle='-', label=f'a={a}, b={b}, c={c}')
+
+            # Set plot title, labels, grid, limits, and legend
+            plt.title('Temperature Variation Over Time')
+            plt.xlabel('Time')
+            plt.ylabel('Temperature')
+            plt.grid(True)
+            plt.xlim(0, 10)  # Limit x-axis from 0 to 10
+            plt.legend()  # Show legend with labels from the plot
+            plt.show()  # Display the plot
+
+    except FileNotFoundError:
+        print("File not found. Please make sure 'coefficients.csv' exists.")
+
+if _name_ == "_main_":
+    main()
